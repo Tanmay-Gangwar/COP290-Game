@@ -5,6 +5,10 @@
 #include"startScreen.hpp"
 #include"maze.hpp"
 #include"data.hpp"
+#include"text.hpp"
+#include"menu.hpp"
+#include"score.hpp"
+
 using namespace std;
 
 // const int SCREEN_WIDTH = 640;
@@ -16,6 +20,12 @@ SDL_Surface* background;
 
 StartScreen startScreen;
 Maze maze;
+Text text;
+Menu menu;
+Score score;
+
+bool ShowMenu = false;
+bool ShowScore = false;
 
 SDL_Rect* backgroundRect;
 // Character player;
@@ -47,9 +57,9 @@ int main(int argc, const char* argv){
 
 void init(){
     SDL_Init(SDL_INIT_VIDEO);
+    
     window = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     screenSurface = SDL_GetWindowSurface(window);
-
     backgroundRect = new SDL_Rect();
     backgroundRect->x = 0;
     backgroundRect->y = 0;
@@ -60,7 +70,7 @@ void init(){
 void loadMedia(){
     background = SDL_LoadBMP("Images/GameBackground.bmp");
     // player = Character("Blue/Blue", SCREEN_WIDTH, SCREEN_HEIGHT);
-    cerr << "Doneloadting\n";
+    // cerr << "Doneloadting\n";
 }
 
 
@@ -88,19 +98,29 @@ void run(){
                 transmit("Terminate");
                 return;
             }
+            if (e.type == SDL_KEYDOWN){
+                if (e.key.keysym.sym == SDLK_TAB) ShowMenu = true;
+                if (e.key.keysym.sym == SDLK_LSHIFT) ShowScore = true;
+            }
+            if (e.type == SDL_KEYUP){
+                if (e.key.keysym.sym == SDLK_TAB) ShowMenu = false;
+                if (e.key.keysym.sym == SDLK_LSHIFT) ShowScore = false;
+            }
             // player.move(e);
             std::string toSend = players[-1].move(e, maze.maze);
             // string toSend = to_string(players[-1].rect->x) + " " + to_string(players[-1].rect->y);
             transmit(toSend.c_str());
         }
         // SDL_BlitScaled(maze.grass, NULL, screenSurface, backgroundRect);
-        // SDL_BlitScaled(background, NULL, screenSurface, backgroundRect);
+        SDL_BlitScaled(background, NULL, screenSurface, backgroundRect);
         maze.draw(screenSurface, players[-1].x, players[-1].y);
+        if (ShowMenu) menu.draw(screenSurface);
         // player.draw(screenSurface);
         for (auto z: players){
             // cerr << z.first << "\n";
             z.second.draw(screenSurface, players[-1].x, players[-1].y);
         }
+        if (ShowScore) score.draw(screenSurface, players);
         // players[-1].draw(screenSurface);
         // if (players.find(5) != players.end()){
             // cerr << "Found\n";

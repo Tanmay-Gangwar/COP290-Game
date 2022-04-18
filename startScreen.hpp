@@ -10,7 +10,6 @@ using namespace std;
 
 class StartScreen{
     public:
-    string Players[12];
     bool Available[12];
     SDL_Surface* background;
     SDL_Surface* players[12];
@@ -24,22 +23,10 @@ class StartScreen{
     SDL_Rect* StartLogoRect;
     int playerCounter = 0;
     int playerWidth = 60;
-    int startLogoWidth = 200;
-    int startLogoHeight = 150;
+    int startLogoWidth = 500;
+    int startLogoHeight = 100;
 
     StartScreen(){
-        Players[0]  = "Red";
-        Players[1]  = "Yellow";
-        Players[2]  = "Blue";
-        Players[3]  = "Cyan";
-        Players[4]  = "LightGreen";
-        Players[5]  = "DarkGreen";
-        Players[6]  = "Pink";
-        Players[7]  = "Orange";
-        Players[8]  = "White";
-        Players[9]  = "Indigo";
-        Players[10] = "Purple";
-        Players[11] = "Brown";
         for (int i = 0; i < 12; i++) Available[i] = true;
 
         backgroundRect = new SDL_Rect();
@@ -50,7 +37,7 @@ class StartScreen{
 
         PlayerRect = new SDL_Rect();
         PlayerRect->x = SCREEN_WIDTH / 2 - playerWidth / 2;
-        PlayerRect->y = SCREEN_HEIGHT / 2 - playerWidth / 2;
+        PlayerRect->y = 5 * SCREEN_HEIGHT / 6 - 3 * playerWidth / 2;
         PlayerRect->w = playerWidth;
         PlayerRect->h = playerWidth;
 
@@ -68,7 +55,7 @@ class StartScreen{
 
         StartLogoRect = new SDL_Rect();
         StartLogoRect->x = SCREEN_WIDTH / 2 - startLogoWidth / 2;
-        StartLogoRect->y = 3 * SCREEN_HEIGHT / 4;
+        StartLogoRect->y = 6 * SCREEN_HEIGHT / 7;
         StartLogoRect->w = startLogoWidth;
         StartLogoRect->h = startLogoHeight;
 
@@ -108,11 +95,11 @@ class StartScreen{
                     if (e.button.button == SDL_BUTTON_LEFT){
                         if (isHovering(e, LeftArrowRect)) playerCounter = (playerCounter + 11) % 12;
                         if (isHovering(e, RightArrowRect)) playerCounter = (playerCounter + 1) % 12;
-                        if (isHovering(e, StartLogoRect)) return Players[playerCounter];
+                        if (isHovering(e, StartLogoRect)) return colors[playerCounter];
                     }
                 }
                 if (e.type == SDL_KEYDOWN){
-                    if (e.key.keysym.sym == SDLK_RETURN) return Players[playerCounter];
+                    if (e.key.keysym.sym == SDLK_RETURN) return colors[playerCounter];
                 }
             }
             SDL_BlitScaled(background, NULL, screen, backgroundRect);
@@ -129,12 +116,12 @@ class StartScreen{
     void loadMedia(){
         background = SDL_LoadBMP("Images/StartScreenBackground.bmp");
         for (int i = 0; i < 12; i++) {
-            string Player = "Images/" + Players[i] + "Down0.bmp";
+            string Player = "Images/" + colors[i] + "Down0.bmp";
             players[i] = SDL_LoadBMP(Player.c_str());
         }
         if (background == NULL) cerr << "Background null\n";
         for (int i = 0; i < 12; i++){
-            if (players[i] == NULL) cerr << Players[i] << " nnull\n";
+            if (players[i] == NULL) cerr << colors[i] << " nnull\n";
         }
         LeftArrows[0] = SDL_LoadBMP("Images/LeftNormalArrow.bmp");
         LeftArrows[1] = SDL_LoadBMP("Images/LeftHighlightedArrow.bmp");

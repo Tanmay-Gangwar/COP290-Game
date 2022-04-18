@@ -21,7 +21,7 @@
 
 CC = g++
 CLIENT_OBJ = main.cpp
-CLIENT_FLAGS = -w -pthread -lSDL2 -lSDL2_image
+CLIENT_FLAGS = -w -pthread -lSDL2 -lSDL2_image -lSDL2_ttf
 CLIENT_OUT = main.out
 
 SERVER_OBJ = server.cpp

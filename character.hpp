@@ -5,6 +5,7 @@
 #include<SDL2/SDL.h>
 #include<vector>
 #include"data.hpp"
+#include<ctime>
 
 
 using namespace std;
@@ -23,6 +24,8 @@ class Character{
     int bikeHight = 50;
     int verticalBikeWidth = 40;
     SDL_Rect* bikeRect;
+    time_t lastUpdated;
+    int score;
 
     Character(){}
     
@@ -49,7 +52,9 @@ class Character{
         imgCounter = 3;
         direction = 0;
         pressed = false;
-        onBicycle = true;
+        onBicycle = false;
+        lastUpdated = time(0);
+        score = 0;
         // cerr << "1\n";
     }
 
@@ -84,6 +89,7 @@ class Character{
     }
 
     std::string move(SDL_Event &e, vector<vector<char>> &maze){
+        lastUpdated = time(0);
         if (e.type == SDL_KEYDOWN){
             if (e.key.keysym.sym == SDLK_LEFT) {
                 int i = y / MAZE_HEIGHT;
@@ -109,11 +115,16 @@ class Character{
                 if (i < 45 && maze[i][j] != 'X') y += (onBicycle ? 20: 10);
                 direction = 3;
             }
+            else if (e.key.keysym.sym == SDLK_SPACE){
+                int i = y / MAZE_HEIGHT;
+                int j = x / MAZE_WIDTH;
+                if (maze[i][j] == 'Y') onBicycle = !onBicycle;
+            }
             pressed = true;
             imgCounter = (imgCounter + 1) % 3;
         }
         else if (e.type == SDL_KEYUP) pressed = false;
-        return std::to_string(x) + " " + std::to_string(y) + " " + std::to_string(imgCounter) + " " + std::to_string(direction) + " " + color;
+        return std::to_string(x) + " " + std::to_string(y) + " " + std::to_string(imgCounter) + " " + std::to_string(direction) + " " + color + (onBicycle ? " 1" : " 0") + " " + std::to_string(score);
     }
 
     SDL_Surface* getImage(){
@@ -124,6 +135,7 @@ class Character{
     }
 
     void draw(SDL_Surface* screen, int Otherx, int Othery){
+        if (time(0) - lastUpdated > 5) return;
         cerr << "MyCoord: " << x << " " << y << "\n";
         cerr << "OtCoord: " << Otherx << " " << Othery << "\n";
         rect->w = PLAYER_WIDTH;
@@ -138,22 +150,22 @@ class Character{
                 bikeRect->w = horizontalBikeWidth;
                 bikeRect->h = bikeHight;
                 bikeRect->x = SCREEN_WIDTH / 2 + - bikeRect->w / 4 + x - Otherx;
-                bikeRect->y = SCREEN_HEIGHT / 2 + bikeRect->h / 2 + y - Othery;
+                bikeRect->y = SCREEN_HEIGHT / 2 + 3 * bikeRect->h / 4 + y - Othery;
                 SDL_BlitScaled(bicycles[direction], NULL, screen, bikeRect);
                 SDL_BlitScaled(z, NULL, screen, rect);
             }
             else if (direction == 1){
                 bikeRect->w = horizontalBikeWidth;
                 bikeRect->h = bikeHight;
-                bikeRect->x = SCREEN_WIDTH / 2 + x - Otherx;
-                bikeRect->y = SCREEN_HEIGHT / 2 + bikeRect->h / 2 + y - Othery;
+                bikeRect->x = SCREEN_WIDTH / 2 + bikeRect->w / 8 + x - Otherx;
+                bikeRect->y = SCREEN_HEIGHT / 2 + 3 * bikeRect->h / 4 + y - Othery;
                 SDL_BlitScaled(bicycles[direction], NULL, screen, bikeRect);
                 SDL_BlitScaled(z, NULL, screen, rect);
             }
             else if (direction == 2){
                 bikeRect->w = verticalBikeWidth;
                 bikeRect->h = bikeHight;
-                bikeRect->x = SCREEN_WIDTH / 2 + bikeRect->w / 4 + x - Otherx;
+                bikeRect->x = SCREEN_WIDTH / 2 + bikeRect->w / 2 + x - Otherx;
                 bikeRect->y = SCREEN_HEIGHT / 2 + bikeRect->h / 2 + y - Othery;
                 SDL_BlitScaled(bicycles[direction], NULL, screen, bikeRect);
                 SDL_BlitScaled(z, NULL, screen, rect);
@@ -161,7 +173,7 @@ class Character{
             else {
                 bikeRect->w = verticalBikeWidth;
                 bikeRect->h = bikeHight;
-                bikeRect->x = SCREEN_WIDTH / 2 + bikeRect->w / 4 + x - Otherx;
+                bikeRect->x = SCREEN_WIDTH / 2 + bikeRect->w / 2 + x - Otherx;
                 bikeRect->y = SCREEN_HEIGHT / 2 + bikeRect->h / 2 + y - Othery;
                 SDL_BlitScaled(z, NULL, screen, rect);
                 SDL_BlitScaled(bicycles[direction], NULL, screen, bikeRect);

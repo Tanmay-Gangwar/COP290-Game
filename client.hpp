@@ -17,7 +17,7 @@
 #define PORT 8080
 using namespace std;
 
-const char* SERVER_IP = "127.0.0.1";
+const char* SERVER_IP = "10.184.22.118";
 
 
 map<int, Character> players;
@@ -38,6 +38,8 @@ void handle(string s){
     string imgCounter = "";
     string direction = "";
     string color = "";
+    string onBicycle = "";
+    string score = "";
     for (char c: s){
         if (c == ' ') cnt++;
         else if (cnt == 5){
@@ -46,10 +48,10 @@ void handle(string s){
         else if ('0' > c || '9' < c) return;
     }
     // cerr << "test2 " << cnt << "\n";
-    if (cnt != 5) return;
+    if (cnt != 7) return;
     // cerr << "Test2\n";
     cnt = 0;
-    cerr << s << "\n";
+    // cerr << s << "\n";
     for (char c: s){
         if (c == ' ') cnt++;
         else if (cnt == 0) player += c;
@@ -57,7 +59,9 @@ void handle(string s){
         else if (cnt == 2) y += c;
         else if (cnt == 3) imgCounter += c;
         else if (cnt == 4) direction += c;
-        else color += c;
+        else if (cnt == 5) color += c;
+        else if (cnt == 6) onBicycle += c;
+        else score += c;
     }
     cerr << color << "\n";
     // cerr << "OMP\n";
@@ -77,6 +81,9 @@ void handle(string s){
     players[Player].y = Y;
     players[Player].imgCounter = atoi(imgCounter.c_str());
     players[Player].direction = atoi(direction.c_str());
+    players[Player].onBicycle = (onBicycle == "1");
+    players[Player].lastUpdated = time(0);
+    players[Player].score = atoi(score.c_str());
 }   
 
 void *getMessages(void *args){
