@@ -26,6 +26,7 @@ int opt = 1;
 int addrlen = sizeof(address);
 bool terminate = false;
 
+
 void* HandleClient(void *args){
 	char buffer[1024];
 	// cout << "New client added\n";
@@ -34,27 +35,32 @@ void* HandleClient(void *args){
 	int newSocket = *socketPointer;
 	while (true){
 		valread = read(newSocket, buffer, 1024);
-		string s(buffer);
+		string temp(buffer);
+		if (temp.length() < 5) continue;
+		string init(temp.begin(), temp.begin() + 4);
+		if (init != "Data") continue;
+		string s(temp.begin() + 5, temp.end());
         // s += " ";
         // s += to_string(newSocket);
         // if (s.length()) cerr << s << "\n";
-		if (s == "Terminate") {
-            cerr << "Termination initiated\n";
-			Terminated.insert(newSocket);
-            // send(newSocket, s.c_str(), strlen(s.c_str()), 0);
-			s = to_string(newSocket) + " 0 0 0 0 Terminate";
-			for (int x: sockets){
-				if (x == newSocket || Terminated.find(x) != Terminated.end()) continue;
-				send(x, s.c_str(), strlen(s.c_str()), 0);
-			}
-			return NULL;
-		}
-        s = to_string(newSocket) + " " + s;
+        s = to_string(newSocket) + "#" + s;
+		s = "Data#" + s;
 		// cout << s << "\n";
 		for (int x: sockets){
 			if (x == newSocket || Terminated.find(x) != Terminated.end()) continue;
-            cerr << "sent to " << x << " " << s << "\n";
+            // cerr << "sent to " << x << " " << s << "\n";
 			send(x, s.c_str(), strlen(s.c_str()), 0);
+		}
+		if (temp == "Data#Terminate") {
+            // cerr << "Termination initiated\n";
+			Terminated.insert(newSocket);
+            // // send(newSocket, s.c_str(), strlen(s.c_str()), 0);
+			// s = to_string(newSocket) + " 0 0 0 0 Terminate";
+			// for (int x: sockets){
+			// 	if (x == newSocket || Terminated.find(x) != Terminated.end()) continue;
+			// 	send(x, s.c_str(), strlen(s.c_str()), 0);
+			// }
+			return NULL;
 		}
         for (int i = 0; i < 1024; i++) buffer[i] = 0;
 		// send(new_socket, hello, strlen(hello), 0);

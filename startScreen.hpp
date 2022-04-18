@@ -60,7 +60,7 @@ class StartScreen{
         StartLogoRect->h = startLogoHeight;
 
         loadMedia();
-        cerr << "Media loaded\n";
+        // cerr << "Media loaded\n";
     }
     
 
@@ -119,10 +119,10 @@ class StartScreen{
             string Player = "Images/" + colors[i] + "Down0.bmp";
             players[i] = SDL_LoadBMP(Player.c_str());
         }
-        if (background == NULL) cerr << "Background null\n";
-        for (int i = 0; i < 12; i++){
-            if (players[i] == NULL) cerr << colors[i] << " nnull\n";
-        }
+        // if (background == NULL) cerr << "Background null\n";
+        // for (int i = 0; i < 12; i++){
+        //     if (players[i] == NULL) cerr << colors[i] << " nnull\n";
+        // }
         LeftArrows[0] = SDL_LoadBMP("Images/LeftNormalArrow.bmp");
         LeftArrows[1] = SDL_LoadBMP("Images/LeftHighlightedArrow.bmp");
         RightArrows[0] = SDL_LoadBMP("Images/RightNormalArrow.bmp");

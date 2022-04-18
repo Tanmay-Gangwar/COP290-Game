@@ -21,11 +21,11 @@ SDL_Surface* background;
 StartScreen startScreen;
 Maze maze;
 Text text;
-Menu menu;
 Score score;
 
 bool ShowMenu = false;
 bool ShowScore = false;
+bool ShowMap = false;
 
 SDL_Rect* backgroundRect;
 // Character player;
@@ -48,7 +48,7 @@ int main(int argc, const char* argv){
     // cerr << "game ended\n";
     loadMedia();
     start(characterColor, maze.gateCoord);
-    cerr << "Run has initiated\n";
+    // cerr << "Run has initiated\n";
     run();
     close();
 
@@ -95,30 +95,45 @@ void run(){
     while (true){
         while (SDL_PollEvent(&e) != 0){
             if (e.type == SDL_QUIT) {
-                transmit("Terminate");
+                SDL_Delay(200);
+                transmit("Data#Terminate");
                 return;
             }
             if (e.type == SDL_KEYDOWN){
                 if (e.key.keysym.sym == SDLK_TAB) ShowMenu = true;
-                if (e.key.keysym.sym == SDLK_LSHIFT) ShowScore = true;
+                else if (e.key.keysym.sym == SDLK_LSHIFT) ShowScore = true;
+                else if (e.key.keysym.sym == SDLK_m) {
+                    ShowMap = true;
+                    MAZE_WIDTH = SCREEN_WIDTH / 100;
+                    MAZE_HEIGHT = SCREEN_HEIGHT / 45;
+                }
             }
             if (e.type == SDL_KEYUP){
                 if (e.key.keysym.sym == SDLK_TAB) ShowMenu = false;
-                if (e.key.keysym.sym == SDLK_LSHIFT) ShowScore = false;
+                else if (e.key.keysym.sym == SDLK_LSHIFT) ShowScore = false;
+                else if (e.key.keysym.sym == SDLK_m) {
+                    ShowMap = false;
+                    MAZE_WIDTH = SCREEN_WIDTH / 16;
+                    MAZE_HEIGHT = SCREEN_HEIGHT / 9;
+                }
             }
             // player.move(e);
-            std::string toSend = players[-1].move(e, maze.maze);
-            // string toSend = to_string(players[-1].rect->x) + " " + to_string(players[-1].rect->y);
-            transmit(toSend.c_str());
+            if (!ShowMap){
+                players[-1].move(e, maze.maze, menu.hints, menu.solvedBy, menu.points);
+                std::string toSend = players[-1].getDataToSend(menu.solvedBy);
+                // string toSend = to_string(players[-1].rect->x) + " " + to_string(players[-1].rect->y);
+                transmit(toSend.c_str());
+            }
         }
         // SDL_BlitScaled(maze.grass, NULL, screenSurface, backgroundRect);
         SDL_BlitScaled(background, NULL, screenSurface, backgroundRect);
-        maze.draw(screenSurface, players[-1].x, players[-1].y);
+        if (ShowMap) maze.draw(screenSurface, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+        else maze.draw(screenSurface, players[-1].x, players[-1].y);
         if (ShowMenu) menu.draw(screenSurface);
         // player.draw(screenSurface);
         for (auto z: players){
             // cerr << z.first << "\n";
-            z.second.draw(screenSurface, players[-1].x, players[-1].y);
+            if (!ShowMap) z.second.draw(screenSurface, players[-1].x, players[-1].y);
         }
         if (ShowScore) score.draw(screenSurface, players);
         // players[-1].draw(screenSurface);

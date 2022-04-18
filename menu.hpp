@@ -86,7 +86,7 @@ class Menu{
             if (solvedBy[i] == "None") color = colorCodes[12];
             else{
                 for (int j = 0; j < 12; j++){
-                    if (solvedBy[j] == colors[j]) color = colorCodes[j];
+                    if (solvedBy[i] == colors[j]) color = colorCodes[j];
                 }
             }
             // SDL_Color color = colorCodes[i];

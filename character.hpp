@@ -7,7 +7,6 @@
 #include"data.hpp"
 #include<ctime>
 
-
 using namespace std;
 class Character{
     public:
@@ -88,7 +87,7 @@ class Character{
         }
     }
 
-    std::string move(SDL_Event &e, vector<vector<char>> &maze){
+    void move(SDL_Event &e, vector<vector<char>> &maze, vector<pair<string, char>> &hints, vector<string> &solvedBy, vector<int> &points){
         lastUpdated = time(0);
         if (e.type == SDL_KEYDOWN){
             if (e.key.keysym.sym == SDLK_LEFT) {
@@ -120,11 +119,115 @@ class Character{
                 int j = x / MAZE_WIDTH;
                 if (maze[i][j] == 'Y') onBicycle = !onBicycle;
             }
+            else if (e.key.keysym.sym == SDLK_0 || e.key.keysym.sym == SDLK_KP_0){
+                int i = y / MAZE_HEIGHT;
+                int j = x / MAZE_WIDTH;
+                if (maze[i][j] == hints[0].second && solvedBy[0] == "None"){
+                    score += points[0];
+                    solvedBy[0] = color;
+                }
+            }
+            else if (e.key.keysym.sym == SDLK_1 || e.key.keysym.sym == SDLK_KP_1){
+                int i = y / MAZE_HEIGHT;
+                int j = x / MAZE_WIDTH;
+                if (maze[i][j] == hints[1].second && solvedBy[1] == "None"){
+                    score += points[1];
+                    solvedBy[1] = color;
+                }
+            }
+            else if (e.key.keysym.sym == SDLK_2 || e.key.keysym.sym == SDLK_KP_2){
+                int i = y / MAZE_HEIGHT;
+                int j = x / MAZE_WIDTH;
+                if (maze[i][j] == hints[2].second && solvedBy[2] == "None"){
+                    score += points[2];
+                    solvedBy[2] = color;
+                }
+            }
+            else if (e.key.keysym.sym == SDLK_3 || e.key.keysym.sym == SDLK_KP_3){
+                int i = y / MAZE_HEIGHT;
+                int j = x / MAZE_WIDTH;
+                if (maze[i][j] == hints[3].second && solvedBy[3] == "None"){
+                    score += points[3];
+                    solvedBy[3] = color;
+                }
+            }
+            else if (e.key.keysym.sym == SDLK_4 || e.key.keysym.sym == SDLK_KP_4){
+                int i = y / MAZE_HEIGHT;
+                int j = x / MAZE_WIDTH;
+                if (maze[i][j] == hints[4].second && solvedBy[4] == "None"){
+                    score += points[4];
+                    solvedBy[4] = color;
+                }
+            }
+            else if (e.key.keysym.sym == SDLK_5 || e.key.keysym.sym == SDLK_KP_5){
+                int i = y / MAZE_HEIGHT;
+                int j = x / MAZE_WIDTH;
+                if (maze[i][j] == hints[5].second && solvedBy[5] == "None"){
+                    score += points[5];
+                    solvedBy[5] = color;
+                }
+            }
+            else if (e.key.keysym.sym == SDLK_6 || e.key.keysym.sym == SDLK_KP_6){
+                int i = y / MAZE_HEIGHT;
+                int j = x / MAZE_WIDTH;
+                if (maze[i][j] == hints[6].second && solvedBy[6] == "None"){
+                    score += points[6];
+                    solvedBy[6] = color;
+                }
+            }
+            else if (e.key.keysym.sym == SDLK_7 || e.key.keysym.sym == SDLK_KP_7){
+                int i = y / MAZE_HEIGHT;
+                int j = x / MAZE_WIDTH;
+                if (maze[i][j] == hints[7].second && solvedBy[7] == "None"){
+                    score += points[7];
+                    solvedBy[7] = color;
+                }
+            }
+            else if (e.key.keysym.sym == SDLK_8 || e.key.keysym.sym == SDLK_KP_8){
+                int i = y / MAZE_HEIGHT;
+                int j = x / MAZE_WIDTH;
+                if (maze[i][j] == hints[8].second && solvedBy[8] == "None"){
+                    score += points[8];
+                    solvedBy[8] = color;
+                }
+            }
+            else if (e.key.keysym.sym == SDLK_9 || e.key.keysym.sym == SDLK_KP_9){
+                int i = y / MAZE_HEIGHT;
+                int j = x / MAZE_WIDTH;
+                if (maze[i][j] == hints[9].second && solvedBy[9] == "None"){
+                    score += points[9];
+                    solvedBy[9] = color;
+                }
+            }
             pressed = true;
             imgCounter = (imgCounter + 1) % 3;
         }
         else if (e.type == SDL_KEYUP) pressed = false;
-        return std::to_string(x) + " " + std::to_string(y) + " " + std::to_string(imgCounter) + " " + std::to_string(direction) + " " + color + (onBicycle ? " 1" : " 0") + " " + std::to_string(score);
+    }
+
+    string getDataToSend(vector<string> &solvedBy){
+        string toSend = "Data#";
+        toSend += to_string(x);
+        toSend += "#";
+        toSend += to_string(y);
+        toSend += "#";
+        toSend += to_string(imgCounter);
+        toSend += "#";
+        toSend += to_string(direction);
+        toSend += "#";
+        toSend += color;
+        toSend += "#";
+        toSend += to_string(onBicycle);
+        toSend += "#";
+        toSend += to_string(score);
+        toSend += "#";
+        toSend += to_string(solvedBy.size());
+        for (int i = 0; i < solvedBy.size(); i++){
+            toSend += "#";
+            toSend += solvedBy[i];
+        }
+        toSend += "#";
+        return toSend;
     }
 
     SDL_Surface* getImage(){
@@ -136,8 +239,8 @@ class Character{
 
     void draw(SDL_Surface* screen, int Otherx, int Othery){
         if (time(0) - lastUpdated > 5) return;
-        cerr << "MyCoord: " << x << " " << y << "\n";
-        cerr << "OtCoord: " << Otherx << " " << Othery << "\n";
+        // cerr << "MyCoord: " << x << " " << y << "\n";
+        // cerr << "OtCoord: " << Otherx << " " << Othery << "\n";
         rect->w = PLAYER_WIDTH;
         rect->h = PLAYER_HEIGHT;
         rect->x = SCREEN_WIDTH / 2 + rect->w / 2 + x - Otherx;

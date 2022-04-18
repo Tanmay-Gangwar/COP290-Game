@@ -114,7 +114,7 @@ class Maze{
         for (int i = 0; i < 11; i++){
             string name = "Images/Road" + to_string(i + 1) + ".bmp";
             roads[i] = SDL_LoadBMP(name.c_str());
-            if (roads[i] == NULL) cerr << "Failed\n";
+            // if (roads[i] == NULL) cerr << "Failed\n";
         }
         yulu[0] = SDL_LoadBMP("Images/YuluStandHorizontal1.bmp");
         yulu[1] = SDL_LoadBMP("Images/YuluStandHorizontal2.bmp");
