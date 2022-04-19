@@ -23,3 +23,7 @@ run the following commands for compiling and running client and game
 make
 ./main.out
 ```
+
+https://lazyfoo.net/tutorials/SDL/index.php helped in learning SDL and game development
+Among us sprites are taken from https://www.artstation.com/artwork/eJJLQX
+Trees and other building images are taken from google image search
