@@ -25,6 +25,7 @@ class Character{
     SDL_Rect* bikeRect;
     time_t lastUpdated;
     int score;
+    time_t bikeStarted;
 
     Character(){}
     
@@ -89,6 +90,10 @@ class Character{
 
     void move(SDL_Event &e, vector<vector<char>> &maze, vector<pair<string, char>> &hints, vector<string> &solvedBy, vector<int> &points){
         lastUpdated = time(0);
+        if (onBicycle && lastUpdated - bikeStarted > 0){
+            score = max(0, score - int(lastUpdated - bikeStarted));
+            bikeStarted = lastUpdated;
+        }
         if (e.type == SDL_KEYDOWN){
             if (e.key.keysym.sym == SDLK_LEFT) {
                 int i = y / MAZE_HEIGHT;
@@ -117,86 +122,119 @@ class Character{
             else if (e.key.keysym.sym == SDLK_SPACE){
                 int i = y / MAZE_HEIGHT;
                 int j = x / MAZE_WIDTH;
-                if (maze[i][j] == 'Y') onBicycle = !onBicycle;
+                if (maze[i][j] == 'Y') {
+                    onBicycle = !onBicycle;
+                    if (onBicycle) bikeStarted = time(0);
+                }
             }
             else if (e.key.keysym.sym == SDLK_0 || e.key.keysym.sym == SDLK_KP_0){
                 int i = y / MAZE_HEIGHT;
                 int j = x / MAZE_WIDTH;
-                if (maze[i][j] == hints[0].second && solvedBy[0] == "None"){
-                    score += points[0];
-                    solvedBy[0] = color;
+                if (solvedBy[0] == "None"){
+                    if (maze[i][j] == hints[0].second){
+                        score += points[0];
+                        solvedBy[0] = color;
+                    }
+                    else score = max(score - 30, 0);
                 }
             }
             else if (e.key.keysym.sym == SDLK_1 || e.key.keysym.sym == SDLK_KP_1){
                 int i = y / MAZE_HEIGHT;
                 int j = x / MAZE_WIDTH;
-                if (maze[i][j] == hints[1].second && solvedBy[1] == "None"){
-                    score += points[1];
-                    solvedBy[1] = color;
+                if (solvedBy[1] == "None"){
+                    if (maze[i][j] == hints[1].second){
+                        score += points[1];
+                        solvedBy[1] = color;
+                    }
+                    else score = max(score - 30, 0);
                 }
             }
             else if (e.key.keysym.sym == SDLK_2 || e.key.keysym.sym == SDLK_KP_2){
                 int i = y / MAZE_HEIGHT;
                 int j = x / MAZE_WIDTH;
-                if (maze[i][j] == hints[2].second && solvedBy[2] == "None"){
-                    score += points[2];
-                    solvedBy[2] = color;
+                if (solvedBy[2] == "None"){
+                    if (maze[i][j] == hints[2].second){
+                        score += points[2];
+                        solvedBy[2] = color;
+                    }
+                    else score = max(score - 30, 0);
                 }
             }
             else if (e.key.keysym.sym == SDLK_3 || e.key.keysym.sym == SDLK_KP_3){
                 int i = y / MAZE_HEIGHT;
                 int j = x / MAZE_WIDTH;
-                if (maze[i][j] == hints[3].second && solvedBy[3] == "None"){
-                    score += points[3];
-                    solvedBy[3] = color;
+                if (solvedBy[3] == "None"){
+                    if (maze[i][j] == hints[3].second){
+                        score += points[3];
+                        solvedBy[3] = color;
+                    }
+                    else score = max(score - 30, 0);
                 }
             }
             else if (e.key.keysym.sym == SDLK_4 || e.key.keysym.sym == SDLK_KP_4){
                 int i = y / MAZE_HEIGHT;
                 int j = x / MAZE_WIDTH;
-                if (maze[i][j] == hints[4].second && solvedBy[4] == "None"){
-                    score += points[4];
-                    solvedBy[4] = color;
+                if (solvedBy[4] == "None"){
+                    if (maze[i][j] == hints[4].second){
+                        score += points[4];
+                        solvedBy[4] = color;
+                    }
+                    else score = max(score - 30, 0);
                 }
             }
             else if (e.key.keysym.sym == SDLK_5 || e.key.keysym.sym == SDLK_KP_5){
                 int i = y / MAZE_HEIGHT;
                 int j = x / MAZE_WIDTH;
-                if (maze[i][j] == hints[5].second && solvedBy[5] == "None"){
-                    score += points[5];
-                    solvedBy[5] = color;
+                if (solvedBy[5] == "None"){
+                    if (maze[i][j] == hints[5].second){
+                        score += points[5];
+                        solvedBy[5] = color;
+                    }
+                    else score = max(score - 30, 0);
                 }
             }
             else if (e.key.keysym.sym == SDLK_6 || e.key.keysym.sym == SDLK_KP_6){
                 int i = y / MAZE_HEIGHT;
                 int j = x / MAZE_WIDTH;
-                if (maze[i][j] == hints[6].second && solvedBy[6] == "None"){
-                    score += points[6];
-                    solvedBy[6] = color;
+                if (solvedBy[6] == "None"){
+                    if (maze[i][j] == hints[6].second){
+                        score += points[6];
+                        solvedBy[6] = color;
+                    }
+                    else score = max(score - 30, 0);
                 }
             }
             else if (e.key.keysym.sym == SDLK_7 || e.key.keysym.sym == SDLK_KP_7){
                 int i = y / MAZE_HEIGHT;
                 int j = x / MAZE_WIDTH;
-                if (maze[i][j] == hints[7].second && solvedBy[7] == "None"){
-                    score += points[7];
-                    solvedBy[7] = color;
+                if (solvedBy[7] == "None"){
+                    if (maze[i][j] == hints[7].second){
+                        score += points[7];
+                        solvedBy[7] = color;
+                    }
+                    else score = max(score - 30, 0);
                 }
             }
             else if (e.key.keysym.sym == SDLK_8 || e.key.keysym.sym == SDLK_KP_8){
                 int i = y / MAZE_HEIGHT;
                 int j = x / MAZE_WIDTH;
-                if (maze[i][j] == hints[8].second && solvedBy[8] == "None"){
-                    score += points[8];
-                    solvedBy[8] = color;
+                if (solvedBy[8] == "None"){
+                    if (maze[i][j] == hints[8].second){
+                        score += points[8];
+                        solvedBy[8] = color;
+                    }
+                    else score = max(score - 30, 0);
                 }
             }
             else if (e.key.keysym.sym == SDLK_9 || e.key.keysym.sym == SDLK_KP_9){
                 int i = y / MAZE_HEIGHT;
                 int j = x / MAZE_WIDTH;
-                if (maze[i][j] == hints[9].second && solvedBy[9] == "None"){
-                    score += points[9];
-                    solvedBy[9] = color;
+                if (solvedBy[9] == "None"){
+                    if (maze[i][j] == hints[9].second){
+                        score += points[9];
+                        solvedBy[9] = color;
+                    }
+                    else score = max(score - 30, 0);
                 }
             }
             pressed = true;

@@ -18,7 +18,7 @@
 #define PORT 8080
 using namespace std;
 
-const char* SERVER_IP = "192.168.151.50";
+const char* SERVER_IP = "127.0.0.1";
 
 
 map<int, Character> players;
@@ -60,7 +60,7 @@ bool handle(string s){
     string n = "";
     cnt = 0;
     int i;
-    cerr << s << "\n";
+    // cerr << s << "\n";
     for (i = 0; i < s.length(); i++){
         char c = s[i];
         if (c == '#') {
@@ -217,6 +217,7 @@ int start(string characterColor, vector<pair<int, int>> &gates)
             "\nInvalid address/ Address not supported \n");
         return -1;
     }
+    // cerr << "2\n";
  
     if (connect(sock, (struct sockaddr*)&serv_addr,
                 sizeof(serv_addr))
@@ -225,7 +226,7 @@ int start(string characterColor, vector<pair<int, int>> &gates)
         return -1;
     }
     Terminate = false;
-    // cerr << "3\n";
+    cerr << "3\n";
     players[-1] = Character(characterColor, gates);
     // cerr << "4\n";
     pthread_create(&thread, NULL, getMessages, NULL);

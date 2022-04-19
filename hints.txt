@@ -1,21 +1,21 @@
 10
-1. People sit outside the door, tough to find a spot, seats are empty inside but Rs.10 is all you got. #
-6 80
-1. Ancient japanese warlords used to reside here... Now all you can find are paratha eating demons. #
-1 80
-2. Midnight cravings??? Rush here if its only veg you care. #
-2 80
-3. Pack you bag, miss you breakfast... rush to this place 'cause you overslept last night. #
-L 80
-4. Something #
-X 80
-5. Something #
-X 80
-6. Something #
-X 80
-7. Something #
-X 80
-8. Something #
-X 80
-9. Something #
-X 80
+0. People sit outside the door, tough to find a spot, seats are empty inside but Rs.10 is all you got.(100) #
+$ 100
+1. Ancient japanese warlords used to reside here... Now all you can find are paratha eating demons.(70) #
+9 70
+2. Midnight cravings??? Rush here if its only veg you care.(50) #
+2 50
+3. Pack you bag, miss you breakfast... rush to this place 'cause you overslept last night.(50) #
+L 50
+4. Cut your hair, trim your beard, but don't leave campus, oh my dear.(60) #
+Z 60
+5. Filled before majors, empty after it; I help students pass their semesters, find me near LHC.(60) #
+B 60
+6. The further you go, the higher you rise; the nearer you come, will the shows get nice?(80) #
+S 80
+7. Inaugurated by Prime Minister... home to one of the most prestigious departments.(70) #
+J 70
+8. Heads held high, we clinch victory. Staying united we make history(100) #
+3 100
+9. Students visits this place when they are unsure about their preparation for majors.(80) #
+T 80

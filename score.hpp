@@ -18,6 +18,7 @@ class Score{
     SDL_Surface *image[12];
     SDL_Rect *rect;
     vector<SDL_Color> colorCodes;
+    SDL_Color topperColor;
 
     Score(){
         for (int i = 0; i < 12; i++) {
@@ -27,6 +28,7 @@ class Score{
         rect = new SDL_Rect();
         colorCodes = vector<SDL_Color>(13);
         getColorCodes();
+        topperColor = colorCodes[12];
     }
 
     static bool cmp(Character a, Character b){
@@ -45,6 +47,7 @@ class Score{
             rect->h = PLAYER_HEIGHT;
             for (int i = 0; i < 12; i++){
                 if (x.color == colors[i]){
+                    if (i == 0) topperColor = colorCodes[i];
                     SDL_BlitScaled(image[i], NULL, screenSurface, rect);
                     text.displayMedium(screenSurface, to_string(x.score), colorCodes[i], rect->x + PLAYER_WIDTH + 10, rect->y);
                 }

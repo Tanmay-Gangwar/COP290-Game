@@ -45,8 +45,8 @@ int main(int argc, const char* argv){
     // cerr << "Initialized\n";
     string characterColor = startScreen.runGame(screenSurface, window);
     if (characterColor == "QUIT") return 0;
-    // cerr << "game ended\n";
     loadMedia();
+    // cerr << "game ended\n";
     start(characterColor, maze.gateCoord);
     // cerr << "Run has initiated\n";
     run();
@@ -58,7 +58,7 @@ int main(int argc, const char* argv){
 void init(){
     SDL_Init(SDL_INIT_VIDEO);
     
-    window = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow("Hostel Games", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     screenSurface = SDL_GetWindowSurface(window);
     backgroundRect = new SDL_Rect();
     backgroundRect->x = 0;
@@ -129,13 +129,23 @@ void run(){
         SDL_BlitScaled(background, NULL, screenSurface, backgroundRect);
         if (ShowMap) maze.draw(screenSurface, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
         else maze.draw(screenSurface, players[-1].x, players[-1].y);
-        if (ShowMenu) menu.draw(screenSurface);
         // player.draw(screenSurface);
         for (auto z: players){
             // cerr << z.first << "\n";
             if (!ShowMap) z.second.draw(screenSurface, players[-1].x, players[-1].y);
         }
+        if (ShowMenu) menu.draw(screenSurface);
         if (ShowScore) score.draw(screenSurface, players);
+        bool gameCompleted = true;
+        for (string &x: menu.solvedBy){
+            if (x == "None") {
+                gameCompleted = false;
+                break;
+            }
+        }
+        if (gameCompleted){
+            text.displayLarge(screenSurface, "GAME OVER", score.topperColor, -1, 50);
+        }
         // players[-1].draw(screenSurface);
         // if (players.find(5) != players.end()){
             // cerr << "Found\n";
